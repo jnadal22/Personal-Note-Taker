@@ -1,10 +1,11 @@
 const express = require('express');
 const path = require('path');
 const fs = require('fs');
-const { get } = require('http');
-const { randomUUID } = require('crypto');
 
-const uuid = require('./helpers/uuid');
+const uuid = require('uuid')
+const {v4:uuidv4} = uuid;
+
+
 
 const PORT = 3001;
 
@@ -45,11 +46,12 @@ app.get('/api/notes', (req,res) => {
 app.post('/api/notes', (req,res) => {
   console.log(req.body)
 
-  const {title, text} = req.body;
+  const {title, text, Id} = req.body;
 
   const newNote = {
     title,
     text,
+    Id: uuidv4(),
   };
 
 
@@ -79,6 +81,16 @@ app.post('/api/notes', (req,res) => {
       
 })
 
+app.delete('/api/notes/:id', (req,res) => {
+  fs.readFile('db/db.json', (err,data) => {
+    console.error(err);
+
+
+
+  })
+
+})
+
 
 
 
@@ -90,15 +102,3 @@ app.get('*', (req,res) =>
 
 
 
-// // Add a new review
-// parsedReviews.push(newReview);
-
-// // Write updated reviews back to the file
-// fs.writeFile(
-//   './db/reviews.json',
-//   (parsedReviews, null, 4),
-//   (writeErr) =>
-//     writeErr
-//       ? console.error(writeErr)
-//       : console.info('Successfully updated reviews!')
-// );
